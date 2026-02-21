@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Raw Threads — Wear the Culture</title>
+  <meta name="description"
+    content="Raw Threads — Premium streetwear brand. Shop hoodies, tees, caps, and more. Order directly via WhatsApp.">
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='28' font-size='28'>🧵</text></svg>">
+</head>
+
+<body>
+
+  <div class="page-loader" id="pageLoader">
+    <div class="loader-content">
+      <div class="loader-brand" id="loaderBrand">RAW THREADS</div>
+      <div class="loader-cart-wrap">
+        <div class="loader-cart" id="loaderCart">
+          <!-- Realistic Shopping Cart SVG -->
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor"
+            stroke-width="1.2">
+            <!-- Basket -->
+            <path d="M6 6H22L20 15H7L5 2H2" stroke-linecap="round" stroke-linejoin="round" />
+            <!-- Wheels -->
+            <circle cx="9" cy="20" r="2" stroke-linecap="round" stroke-linejoin="round" />
+            <circle cx="18" cy="20" r="2" stroke-linecap="round" stroke-linejoin="round" />
+            <!-- Handle -->
+            <path d="M6 6L7 10H19" stroke-linecap="round" stroke-linejoin="round" opacity="0.4" />
+            <!-- Folded Shirt inside -->
+            <g transform="translate(9, 7) scale(0.4)" stroke="currentColor" fill="none" stroke-width="2">
+              <path d="M10 2L3 5V10L10 13L17 10V5L10 2Z" fill="var(--primary-light)" />
+              <path d="M3 5L10 8L17 5" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M10 8V22" stroke-linecap="round" stroke-linejoin="round" />
+            </g>
+          </svg>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ═══════ NAVBAR ═══════ -->
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <a href="/" class="nav-logo">Raw <span>Threads</span></a>
+      <div class="nav-links" id="navLinks">
+        <a href="/" class="active">Home</a>
+        <a href="/shop">Shop</a>
+        <a href="#categories">Categories</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="nav-actions">
+        <a href="/cart" class="nav-cart" id="navCartBtn">
+          🛒 <span class="cart-count" id="cartCount">0</span>
+        </a>
+        <div class="nav-hamburger" id="navHamburger" onclick="toggleMobileNav()">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══════ HERO SECTION ═══════ -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <p class="hero-subtitle">New Collection 2026</p>
+        <h1 class="hero-title" id="heroTitle"></h1>
+        <p class="hero-description">
+          Premium streetwear crafted for those who dare to stand out.
+          Every piece tells a story — wear the culture, own the streets.
+        </p>
+        <div class="hero-buttons">
+          <a href="/shop" class="btn btn-primary btn-lg">Shop Now</a>
+          <a href="https://wa.me/265886367677?text=Hi%20Raw%20Threads!%20I'd%20like%20to%20browse%20your%20collection."
+            class="btn btn-whatsapp btn-lg" target="_blank">
+            💬 Chat on WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="hero-image">
+      <img src="https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?w=800&h=900&fit=crop"
+        alt="Raw Threads Craftmanship">
+    </div>
+
+
+  </section>
+
+  <!-- ═══════ NEW ARRIVALS ═══════ -->
+  <section class="section" id="newArrivals">
+    <div class="container">
+      <div class="section-title reveal">
+        <h2>New Arrivals</h2>
+        <p>Fresh drops just landed. Be the first to rock the latest.</p>
+        <div class="underline"></div>
+      </div>
+      <div class="product-grid" id="featuredProducts">
+        <!-- Filled by JS -->
+      </div>
+      <div style="text-align:center; margin-top:40px;" class="reveal">
+        <a href="/shop" class="btn btn-outline">View All Products →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════ CATEGORIES ═══════ -->
+  <section class="section section-alt" id="categories">
+    <div class="container">
+      <div class="section-title reveal">
+        <h2>Shop by Category</h2>
+        <p>Find exactly what you're looking for</p>
+        <div class="underline"></div>
+      </div>
+      <div class="categories-grid">
+        <a href="/shop?category=hoodies" class="category-card reveal">
+          <img src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400&h=500&fit=crop" alt="Hoodies">
+          <div class="overlay">
+            <h3>Hoodies</h3>
+          </div>
+        </a>
+        <a href="/shop?category=tshirts" class="category-card reveal">
+          <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=500&fit=crop" alt="T-Shirts">
+          <div class="overlay">
+            <h3>T-Shirts</h3>
+          </div>
+        </a>
+        <a href="/shop?category=caps" class="category-card reveal">
+          <img src="https://images.unsplash.com/photo-1588850561407-ed78c334e67a?w=400&h=500&fit=crop" alt="Caps">
+          <div class="overlay">
+            <h3>Caps</h3>
+          </div>
+        </a>
+        <a href="/shop?category=joggers" class="category-card reveal">
+          <img src="https://images.unsplash.com/photo-1552902865-b72c031ac5ea?w=400&h=500&fit=crop" alt="Joggers">
+          <div class="overlay">
+            <h3>Joggers</h3>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════ CTA BANNER ═══════ -->
+  <section class="section" style="background: var(--dark); color: white; text-align: center;">
+    <div class="container">
+      <div class="reveal">
+        <h2 style="color: white; margin-bottom: 12px;">Ready to Order?</h2>
+        <p style="color: rgba(255,255,255,0.7); max-width: 500px; margin: 0 auto 28px;">
+          Send your order directly via WhatsApp or give us a call. We deliver nationwide!
+        </p>
+        <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+          <a href="https://wa.me/265886367677?text=Hi%20Raw%20Threads!%20I'd%20like%20to%20place%20an%20order."
+            class="btn btn-whatsapp btn-lg" target="_blank">
+            💬 Order on WhatsApp
+          </a>
+          <a href="tel:+265886367677" class="btn btn-primary btn-lg">
+            📞 Call Us Now
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════ FOOTER ═══════ -->
+  <footer class="footer-compact" id="contact">
+    <div class="container">
+      <span class="footer-brand-sm">🧵 Raw Threads</span>
+      <div class="footer-links-sm">
+        <a href="/">Home</a>
+        <a href="/shop">Shop</a>
+        <a href="/cart">Cart</a>
+        <a href="https://wa.me/265886367677" target="_blank">WhatsApp</a>
+        <a href="tel:+265886367677">Call</a>
+      </div>
+      <span class="footer-copy">© 2026 Raw Threads</span>
+    </div>
+  </footer>
+
+  <!-- ═══════ FLOATING BUTTONS ═══════ -->
+  <div class="floating-buttons">
+    <a href="tel:+265886367677" class="float-btn call" title="Call Us">
+      📞
+      <span class="tooltip">Call 0886 367 677</span>
+    </a>
+    <a href="https://wa.me/265886367677?text=Hi%20Raw%20Threads!" class="float-btn whatsapp" target="_blank"
+      title="WhatsApp">
+      💬
+      <span class="tooltip">Chat on WhatsApp</span>
+    </a>
+  </div>
+
+  <!-- ═══════ TOAST CONTAINER ═══════ -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="/js/app.js"></script>
+  <script>
+    // ─── Hero Letter Animation ───────────────────────────
+    function animateHeroTitle() {
+      const title = document.getElementById('heroTitle');
+      const text = 'Stylish Streetwear For Every Occasion';
+      let delay = 0.8;
+      text.split('').forEach((char, i) => {
+        const span = document.createElement('span');
+        span.className = char === ' ' ? '' : 'letter';
+        span.textContent = char === ' ' ? '\u00A0' : char;
+        span.style.animationDelay = delay + 's';
+        delay += 0.04;
+        title.appendChild(span);
+      });
+    }
+
+    // ─── Load New Arrivals ───────────────────────────
+    async function loadNewArrivals() {
+      try {
+        const res = await fetch('/api/products?newStock=true');
+        const products = await res.json();
+
+        const grid = document.getElementById('featuredProducts');
+        // Show newest 4 items
+        grid.innerHTML = products.slice(0, 4).map(p => createProductCard(p)).join('');
+        if (typeof refreshReveal === 'function') refreshReveal();
+
+      } catch (e) {
+        console.error('Failed to load arrivals:', e);
+      }
+    }
+
+
+    // ─── Load Dynamic Categories ───────────────────────
+    async function loadCategories() {
+      const categoryImages = {
+        hoodies: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400&h=500&fit=crop',
+        tshirts: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=500&fit=crop',
+        caps: 'https://images.unsplash.com/photo-1588850561407-ed78c334e67a?w=400&h=500&fit=crop',
+        joggers: 'https://images.unsplash.com/photo-1552902865-b72c031ac5ea?w=400&h=500&fit=crop',
+        shoes: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=500&fit=crop',
+        bags: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400&h=500&fit=crop'
+      };
+      const defaultCatImage = 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=400&h=500&fit=crop';
+
+      try {
+        const res = await fetch('/api/categories');
+        const categories = await res.json();
+        const grid = document.querySelector('.categories-grid');
+        if (categories.length > 0) {
+          grid.innerHTML = categories.map(cat => `
+            <a href="/shop?category=${cat}" class="category-card reveal">
+              <img src="${categoryImages[cat] || defaultCatImage}" alt="${cat}">
+              <div class="overlay">
+                <h3 style="text-transform: capitalize;">${cat}</h3>
+              </div>
+            </a>
+          `).join('');
+          if (typeof refreshReveal === 'function') refreshReveal();
+        }
+      } catch (e) {
+        console.error('Failed to load categories:', e);
+      }
+    }
+
+    // ─── Init ────────────────────────────────────────────
+    document.addEventListener('DOMContentLoaded', () => {
+      animateHeroTitle();
+      loadNewArrivals();
+      loadCategories();
+    });
+
+  </script>
+</body>
+
+</html>

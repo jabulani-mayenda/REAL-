@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop — Raw Threads</title>
+    <meta name="description" content="Browse the full Raw Threads collection.">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='28' font-size='28'>🧵</text></svg>">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="/" class="nav-logo">Raw <span>Threads</span></a>
+            <div class="nav-links" id="navLinks">
+                <a href="/">Home</a>
+                <a href="/shop" class="active">Shop</a>
+                <a href="/#categories">Categories</a>
+                <a href="/#contact">Contact</a>
+            </div>
+            <div class="nav-actions">
+                <a href="/cart" class="nav-cart" id="navCartBtn">
+                    🛒 <span class="cart-count" id="cartCount">0</span>
+                </a>
+                <div class="nav-hamburger" id="navHamburger" onclick="toggleMobileNav()">
+                    <span></span><span></span><span></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- SHOP PAGE -->
+    <div class="shop-page">
+        <div class="container">
+            <h2 class="shop-title reveal">Our Collection</h2>
+
+            <!-- Category Tabs -->
+            <div class="category-tabs reveal" id="categoryTabs">
+                <!-- Filled dynamically -->
+            </div>
+
+
+            <!-- Product Grid -->
+            <div class="product-grid" id="shopProducts"></div>
+            <div id="noProducts" style="display:none; text-align:center; padding:60px 20px;">
+                <p style="font-size:3rem; margin-bottom:12px;">🔍</p>
+                <h3>No products in this category</h3>
+                <p style="color:var(--text-light)">Try a different category</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- COMPACT FOOTER -->
+    <footer class="footer-compact">
+        <div class="container">
+            <span class="footer-brand-sm">🧵 Raw Threads</span>
+            <div class="footer-links-sm">
+                <a href="/">Home</a>
+                <a href="/shop">Shop</a>
+                <a href="/cart">Cart</a>
+                <a href="https://wa.me/265886367677" target="_blank">WhatsApp</a>
+                <a href="tel:+265886367677">Call</a>
+            </div>
+            <span class="footer-copy">© 2026 Raw Threads</span>
+        </div>
+    </footer>
+
+    <!-- Floating Buttons -->
+    <div class="floating-buttons">
+        <a href="tel:+265886367677" class="float-btn call">📞<span class="tooltip">Call 0886 367 677</span></a>
+        <a href="https://wa.me/265886367677" class="float-btn whatsapp" target="_blank">💬<span class="tooltip">Chat on
+                WhatsApp</span></a>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="/js/app.js"></script>
+    <script>
+        let allProducts = [];
+        let currentCategory = 'all';
+
+        function getUrlCategory() {
+            return new URLSearchParams(window.location.search).get('category') || 'all';
+        }
+
+        function setCategory(cat, btn) {
+            currentCategory = cat;
+            document.querySelectorAll('.category-tabs .tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+            renderProducts();
+        }
+
+        function renderProducts() {
+            let filtered = currentCategory === 'all'
+                ? allProducts
+                : allProducts.filter(p => p.category === currentCategory);
+
+            const grid = document.getElementById('shopProducts');
+            const noProducts = document.getElementById('noProducts');
+
+            if (filtered.length === 0) {
+                grid.style.display = 'none';
+                noProducts.style.display = 'block';
+            } else {
+                grid.style.display = 'grid';
+                noProducts.style.display = 'none';
+                grid.innerHTML = filtered.map(p => createProductCard(p)).join('');
+                refreshReveal();
+            }
+        }
+
+        async function loadCategories() {
+            try {
+                const res = await fetch('/api/categories');
+                const categories = await res.json();
+                const container = document.getElementById('categoryTabs');
+
+                let html = `<button class="tab" data-cat="all" onclick="setCategory('all', this)">All</button>`;
+                html += categories.map(cat => `
+                    <button class="tab" data-cat="${cat}" onclick="setCategory('${cat}', this)" style="text-transform: capitalize;">${cat}</button>
+                `).join('');
+                container.innerHTML = html;
+
+                // Sync with URL
+                const urlCat = getUrlCategory();
+                const activeTab = container.querySelector(`[data-cat="${urlCat}"]`) || container.querySelector('[data-cat="all"]');
+                if (activeTab) {
+                    currentCategory = activeTab.dataset.cat;
+                    activeTab.classList.add('active');
+                }
+            } catch (e) {
+                console.error('Failed to load categories:', e);
+            }
+        }
+
+        async function loadProducts() {
+            try {
+                const res = await fetch('/api/products');
+                allProducts = await res.json();
+                await loadCategories(); // Load categories after products list is available
+                renderProducts();
+            } catch (e) { console.error(e); }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadProducts);
+    </script>
+
+</body>
+
+</html>

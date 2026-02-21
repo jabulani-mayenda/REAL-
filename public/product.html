@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product — Raw Threads</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='28' font-size='28'>🧵</text></svg>">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="/" class="nav-logo">Raw <span>Threads</span></a>
+            <div class="nav-links" id="navLinks">
+                <a href="/">Home</a>
+                <a href="/shop">Shop</a>
+                <a href="/#categories">Categories</a>
+                <a href="/#contact">Contact</a>
+            </div>
+            <div class="nav-actions">
+                <a href="/cart" class="nav-cart" id="navCartBtn">
+                    🛒 <span class="cart-count" id="cartCount">0</span>
+                </a>
+                <div class="nav-hamburger" id="navHamburger" onclick="toggleMobileNav()">
+                    <span></span><span></span><span></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- PRODUCT DETAIL -->
+    <div class="product-page">
+        <div class="container">
+            <div class="product-detail" id="productDetail">
+                <!-- Image with zoom -->
+                <div class="detail-image-wrap reveal-left">
+                    <div class="detail-image" id="imageZoomContainer">
+                        <img id="productImage" src="" alt="" class="zoomable-img">
+                    </div>
+                </div>
+
+                <!-- Info -->
+                <div class="detail-info reveal-right">
+                    <h1 id="productName">Loading...</h1>
+                    <div class="detail-price" id="productPrice"></div>
+                    <p class="detail-label">Description:</p>
+                    <p class="detail-description" id="productDescription"></p>
+                    <div class="detail-qty-row">
+                        <span class="detail-label">Quantity:</span>
+                        <div class="quantity-selector">
+                            <button onclick="changeQty(-1)">−</button>
+                            <input type="number" id="productQty" value="1" min="1" max="99" readonly>
+                            <button onclick="changeQty(1)">+</button>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary btn-lg detail-add-btn" id="addToCartBtn" onclick="addDetailToCart()">
+                        Add to Cart
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Related Products -->
+    <section class="section section-alt">
+        <div class="container">
+            <h2 class="shop-title reveal" style="margin-bottom:32px;">You May Also Like</h2>
+            <div class="product-grid" id="relatedProducts"></div>
+        </div>
+    </section>
+
+    <!-- COMPACT FOOTER -->
+    <footer class="footer-compact">
+        <div class="container">
+            <span class="footer-brand-sm">🧵 Raw Threads</span>
+            <div class="footer-links-sm">
+                <a href="/">Home</a><a href="/shop">Shop</a><a href="/cart">Cart</a>
+                <a href="https://wa.me/265886367677" target="_blank">WhatsApp</a>
+            </div>
+            <span class="footer-copy">© 2026 Raw Threads</span>
+        </div>
+    </footer>
+
+    <!-- Floating buttons -->
+    <div class="floating-buttons">
+        <a href="tel:+265886367677" class="float-btn call">📞</a>
+        <a href="https://wa.me/265886367677" class="float-btn whatsapp" target="_blank">💬</a>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- IMAGE ZOOM MODAL -->
+    <div class="zoom-modal" id="zoomModal" onclick="closeZoom()">
+        <img id="zoomImage" src="" alt="">
+        <button class="zoom-close" onclick="closeZoom()">✕</button>
+    </div>
+
+    <script src="/js/app.js"></script>
+    <script>
+        let currentProduct = null;
+
+        function getProductId() {
+            return new URLSearchParams(window.location.search).get('id');
+        }
+
+        function changeQty(delta) {
+            const input = document.getElementById('productQty');
+            let val = parseInt(input.value) + delta;
+            if (val < 1) val = 1;
+            if (currentProduct && val > currentProduct.stock) val = currentProduct.stock;
+            input.value = val;
+        }
+
+        function addDetailToCart() {
+            if (!currentProduct) return;
+            const qty = parseInt(document.getElementById('productQty').value);
+            addToCart(currentProduct, qty);
+        }
+
+        // Image zoom
+        document.getElementById('imageZoomContainer').addEventListener('click', () => {
+            if (!currentProduct) return;
+            const modal = document.getElementById('zoomModal');
+            const zoomImg = document.getElementById('zoomImage');
+            zoomImg.src = currentProduct.image;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+
+        function closeZoom() {
+            document.getElementById('zoomModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeZoom(); });
+
+        async function loadProduct() {
+            const id = getProductId();
+            if (!id) { window.location.href = '/shop'; return; }
+
+            try {
+                const res = await fetch(`/api/products/${id}`);
+                if (!res.ok) throw new Error('Not found');
+                currentProduct = await res.json();
+                const p = currentProduct;
+
+                document.title = `${p.name} — Raw Threads`;
+                document.getElementById('productImage').src = p.image;
+                document.getElementById('productImage').alt = p.name;
+                document.getElementById('productName').textContent = p.name;
+                document.getElementById('productPrice').innerHTML = `MK ${formatPrice(p.price)}`;
+                document.getElementById('productDescription').textContent = p.description;
+
+                loadRelated(p.category, p.id);
+            } catch (e) {
+                document.getElementById('productDetail').innerHTML = `
+          <div style="text-align:center; padding:60px 20px; grid-column:1/-1;">
+            <p style="font-size:3rem; margin-bottom:16px;">😢</p>
+            <h2>Product Not Found</h2>
+            <p style="color:var(--text-light);margin-bottom:24px;">This product may have been removed.</p>
+            <a href="/shop" class="btn btn-primary">Back to Shop</a>
+          </div>`;
+            }
+        }
+
+        async function loadRelated(category, excludeId) {
+            try {
+                const res = await fetch('/api/products');
+                let products = (await res.json()).filter(p => p.id !== excludeId);
+                const sameCat = products.filter(p => p.category === category).slice(0, 4);
+                const display = sameCat.length >= 2 ? sameCat : products.slice(0, 4);
+                document.getElementById('relatedProducts').innerHTML = display.map(p => createProductCard(p)).join('');
+                refreshReveal();
+            } catch (e) { console.error(e); }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadProduct);
+    </script>
+</body>
+
+</html>

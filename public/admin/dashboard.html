@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard — Raw Threads Admin</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/admin/css/admin.css">
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='28' font-size='28'>🧵</text></svg>">
+</head>
+
+<body style="background: var(--light-gray);">
+
+    <!-- ═══════ ADMIN NAVBAR ═══════ -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="/xrt-admin/dashboard" class="nav-logo">Raw <span>Threads</span> <small
+                    style="font-size:0.55em;opacity:0.6;margin-left:8px;">ADMIN</small></a>
+            <div class="nav-links" id="navLinks">
+                <a href="/">View Store</a>
+                <a href="/xrt-admin/dashboard" class="active">Dashboard</a>
+                <a href="/xrt-admin/add-product">Add Product</a>
+            </div>
+            <div class="nav-actions">
+                <button class="btn btn-sm" style="background: rgba(255,255,255,0.15); color:white; font-size:0.8rem;"
+                    onclick="logout()">
+                    Logout
+                </button>
+                <div class="nav-hamburger" id="navHamburger" onclick="toggleMobileNav()">
+                    <span></span><span></span><span></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ═══════ DASHBOARD ═══════ -->
+    <div class="admin-page">
+        <div class="container">
+            <h1 class="admin-title">Admin Dashboard</h1>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid" id="statsGrid">
+                <div class="stat-card" style="border-top: 4px solid #3498DB;">
+                    <div class="stat-label">Total Products</div>
+                    <div class="stat-value" id="statTotal">—</div>
+                </div>
+                <div class="stat-card" style="border-top: 4px solid #27AE60;">
+                    <div class="stat-label">New This Week</div>
+                    <div class="stat-value" id="statNew">—</div>
+                </div>
+                <div class="stat-card" style="border-top: 4px solid #E67E22;">
+                    <div class="stat-label">Low Stock</div>
+                    <div class="stat-value" id="statLowStock">—</div>
+                </div>
+                <div class="stat-card" style="border-top: 4px solid #9B59B6;">
+                    <div class="stat-label">Total Stock Value</div>
+                    <div class="stat-value" id="statValue">—</div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="admin-actions">
+                <a href="/xrt-admin/add-product" class="btn btn-primary">+ Add New Product</a>
+                <a href="/shop" class="btn btn-outline" target="_blank">View Store</a>
+            </div>
+
+            <!-- Product Table -->
+            <div class="admin-table-wrap">
+                <div class="table-header">
+                    <h3>All Products</h3>
+                    <input type="text" id="searchProducts" placeholder="Search products..." class="table-search"
+                        oninput="searchTableProducts()">
+                </div>
+                <table class="admin-table" id="productsTable">
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th>Category</th>
+                            <th>Stock</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productsBody">
+                        <tr>
+                            <td colspan="6" style="text-align:center; padding:40px;">Loading products...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Modal for delete confirmation -->
+    <div class="modal-overlay" id="deleteModal" style="display:none;">
+        <div class="modal-card">
+            <h3>Delete Product</h3>
+            <p>Are you sure you want to delete <strong id="deleteProductName"></strong>? This action cannot be undone.
+            </p>
+            <div class="modal-actions">
+                <button class="btn btn-outline btn-sm" onclick="closeDeleteModal()">Cancel</button>
+                <button class="btn btn-sm" style="background:#E74C3C;color:white;" id="confirmDeleteBtn"
+                    onclick="confirmDelete()">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/app.js"></script>
+    <script>
+        const adminToken = localStorage.getItem('rawthreads_admin_token');
+        let allProducts = [];
+        let deleteTargetId = null;
+
+        // Auth check
+        if (!adminToken) {
+            window.location.href = '/xrt-admin';
+        } else {
+            fetch('/api/auth/verify', { headers: { Authorization: `Bearer ${adminToken}` } })
+                .then(r => { if (!r.ok) window.location.href = '/xrt-admin'; })
+                .catch(() => window.location.href = '/xrt-admin');
+        }
+
+        function authHeaders() {
+            return { Authorization: `Bearer ${adminToken}` };
+        }
+
+        function logout() {
+            fetch('/api/auth/logout', { method: 'POST', headers: authHeaders() });
+            localStorage.removeItem('rawthreads_admin_token');
+            window.location.href = '/xrt-admin';
+        }
+
+        async function loadStats() {
+            try {
+                const res = await fetch('/api/admin/stats', { headers: authHeaders() });
+                const stats = await res.json();
+                document.getElementById('statTotal').textContent = stats.totalProducts;
+                document.getElementById('statNew').textContent = stats.newThisWeek;
+                document.getElementById('statLowStock').textContent = stats.lowStock;
+                document.getElementById('statValue').textContent = `MK ${formatPrice(stats.totalValue)}`;
+            } catch (e) {
+                console.error('Failed to load stats:', e);
+            }
+        }
+
+        async function loadProducts() {
+            try {
+                const res = await fetch('/api/products');
+                allProducts = await res.json();
+                renderProductsTable(allProducts);
+            } catch (e) {
+                console.error('Failed to load products:', e);
+            }
+        }
+
+        function renderProductsTable(products) {
+            const tbody = document.getElementById('productsBody');
+            if (products.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:40px;">
+          No products found. <a href="/xrt-admin/add-product" style="color:var(--primary);font-weight:600;">Add your first product →</a>
+        </td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = products.map(p => `
+        <tr>
+          <td><img src="${p.image}" alt="${p.name}" class="table-img"></td>
+          <td><strong>${p.name}</strong></td>
+          <td>MK ${formatPrice(p.price)}</td>
+          <td><span class="category-badge">${p.category}</span></td>
+          <td>
+            <span class="${p.stock <= 3 ? 'stock-low' : 'stock-ok'}">${p.stock}</span>
+          </td>
+          <td>
+            <a href="/xrt-admin/edit-product?id=${p.id}" class="action-link edit">Edit</a>
+            <button class="action-link delete" onclick="showDeleteModal(${p.id}, '${p.name.replace(/'/g, "\\'")}')">Delete</button>
+          </td>
+        </tr>
+      `).join('');
+        }
+
+        function searchTableProducts() {
+            const q = document.getElementById('searchProducts').value.toLowerCase();
+            const filtered = allProducts.filter(p =>
+                p.name.toLowerCase().includes(q) || p.category.toLowerCase().includes(q)
+            );
+            renderProductsTable(filtered);
+        }
+
+        function showDeleteModal(id, name) {
+            deleteTargetId = id;
+            document.getElementById('deleteProductName').textContent = name;
+            document.getElementById('deleteModal').style.display = 'flex';
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').style.display = 'none';
+            deleteTargetId = null;
+        }
+
+        async function confirmDelete() {
+            if (!deleteTargetId) return;
+            try {
+                const res = await fetch(`/api/products/${deleteTargetId}`, {
+                    method: 'DELETE',
+                    headers: authHeaders()
+                });
+                if (res.ok) {
+                    showToast('Product deleted', 'success');
+                    closeDeleteModal();
+                    loadProducts();
+                    loadStats();
+                } else {
+                    showToast('Failed to delete product', 'error');
+                }
+            } catch (e) {
+                showToast('Error deleting product', 'error');
+            }
+        }
+
+        function toggleMobileNav() {
+            document.getElementById('navLinks').classList.toggle('open');
+            document.getElementById('navHamburger').classList.toggle('active');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadStats();
+            loadProducts();
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product — Raw Threads Admin</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/admin/css/admin.css">
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='28' font-size='28'>🧵</text></svg>">
+</head>
+
+<body style="background: var(--light-gray);">
+
+    <!-- ═══════ ADMIN NAVBAR ═══════ -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="/xrt-admin/dashboard" class="nav-logo">Raw <span>Threads</span> <small
+                    style="font-size:0.55em;opacity:0.6;margin-left:8px;">ADMIN</small></a>
+            <div class="nav-links" id="navLinks">
+                <a href="/">View Store</a>
+                <a href="/xrt-admin/dashboard">Dashboard</a>
+                <a href="/xrt-admin/add-product" class="active">Add Product</a>
+            </div>
+            <div class="nav-actions">
+                <button class="btn btn-sm" style="background: rgba(255,255,255,0.15); color:white; font-size:0.8rem;"
+                    onclick="logout()">Logout</button>
+                <div class="nav-hamburger" id="navHamburger" onclick="toggleMobileNav()">
+                    <span></span><span></span><span></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ═══════ ADD PRODUCT FORM ═══════ -->
+    <div class="admin-page">
+        <div class="container">
+            <h1 class="admin-title">Add New Product</h1>
+
+            <div class="form-card">
+                <form id="productForm" onsubmit="handleSubmit(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="productName">Product Name *</label>
+                            <input type="text" id="productName" placeholder="e.g. Classic Logo Hoodie" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="productPrice">Price (MK) *</label>
+                            <input type="number" id="productPrice" placeholder="e.g. 15000" required min="0">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="productCategory">Category *</label>
+                            <input type="text" id="productCategory" list="categoryList"
+                                placeholder="e.g. hoodies, shoes, bags..." required>
+                            <datalist id="categoryList"></datalist>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="productStock">Stock Quantity *</label>
+                            <input type="number" id="productStock" placeholder="e.g. 20" required min="0">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="productDescription">Description</label>
+                        <textarea id="productDescription" rows="4" placeholder="Describe the product..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="productImage">Product Image</label>
+                        <div class="image-upload" id="imageUpload">
+                            <input type="file" id="productImage" accept="image/*" onchange="previewImage(event)"
+                                style="display:none;">
+                            <div class="upload-placeholder" id="uploadPlaceholder"
+                                onclick="document.getElementById('productImage').click()">
+                                <span style="font-size:2.5rem;">📷</span>
+                                <p>Click to upload image</p>
+                                <small>JPG, PNG, GIF, WebP — max 5MB</small>
+                            </div>
+                            <img id="imagePreview"
+                                style="display:none; max-width:200px; max-height:200px; border-radius:8px; cursor:pointer;"
+                                onclick="document.getElementById('productImage').click()">
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="display: flex; gap: 24px;">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="productFeatured">
+                            <span>Featured product</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="productNewStock">
+                            <span>New Stock (New Arrivals)</span>
+                        </label>
+                    </div>
+
+                    <div class="form-actions">
+                        <a href="/xrt-admin/dashboard" class="btn btn-outline">Cancel</a>
+                        <button type="submit" class="btn btn-primary" id="submitBtn">Save Product</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="/js/app.js"></script>
+    <script>
+        const adminToken = localStorage.getItem('rawthreads_admin_token');
+
+        // Auth check
+        if (!adminToken) {
+            window.location.href = '/xrt-admin';
+        }
+
+        function authHeaders() {
+            return { Authorization: `Bearer ${adminToken}` };
+        }
+
+        function logout() {
+            fetch('/api/auth/logout', { method: 'POST', headers: authHeaders() });
+            localStorage.removeItem('rawthreads_admin_token');
+            window.location.href = '/xrt-admin';
+        }
+
+        function previewImage(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (ev) {
+                    document.getElementById('imagePreview').src = ev.target.result;
+                    document.getElementById('imagePreview').style.display = 'block';
+                    document.getElementById('uploadPlaceholder').style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        async function handleSubmit(e) {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            btn.textContent = 'Saving...';
+            btn.disabled = true;
+
+            const formData = new FormData();
+            formData.append('name', document.getElementById('productName').value);
+            formData.append('price', document.getElementById('productPrice').value);
+            formData.append('category', document.getElementById('productCategory').value);
+            formData.append('stock', document.getElementById('productStock').value);
+            formData.append('description', document.getElementById('productDescription').value);
+            formData.append('featured', document.getElementById('productFeatured').checked);
+            formData.append('new_stock', document.getElementById('productNewStock').checked);
+
+
+            const imageFile = document.getElementById('productImage').files[0];
+            if (imageFile) {
+                formData.append('image', imageFile);
+            }
+
+            try {
+                const res = await fetch('/api/products', {
+                    method: 'POST',
+                    headers: authHeaders(),
+                    body: formData
+                });
+
+                if (res.ok) {
+                    showToast('Product created successfully!', 'success');
+                    setTimeout(() => window.location.href = '/xrt-admin/dashboard', 1500);
+                } else {
+                    const err = await res.json();
+                    showToast(err.error || 'Failed to create product', 'error');
+                }
+            } catch (err) {
+                showToast('Connection error. Try again.', 'error');
+            }
+
+            btn.textContent = 'Save Product';
+            btn.disabled = false;
+        }
+
+        async function loadExistingCategories() {
+            try {
+                const res = await fetch('/api/categories');
+                const categories = await res.json();
+                const list = document.getElementById('categoryList');
+                list.innerHTML = categories.map(c => `<option value="${c}">`).join('');
+            } catch (e) { }
+        }
+
+        function toggleMobileNav() {
+            document.getElementById('navLinks').classList.toggle('open');
+            document.getElementById('navHamburger').classList.toggle('active');
+        }
+
+        document.addEventListener('DOMContentLoaded', loadExistingCategories);
+    </script>
+
+</body>
+
+</html>

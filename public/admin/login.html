@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login — Raw Threads</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/admin/css/admin.css">
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='28' font-size='28'>🧵</text></svg>">
+</head>
+
+<body style="background: var(--light-gray);">
+
+    <div class="admin-login-page">
+        <div class="admin-login-card">
+            <div class="login-logo">
+                <h2>Raw <span style="color: var(--primary);">Threads</span></h2>
+                <p>Admin Panel</p>
+            </div>
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" placeholder="Enter username" required autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter password" required
+                        autocomplete="current-password">
+                </div>
+                <div id="loginError" class="login-error" style="display:none;"></div>
+                <button type="submit" class="btn btn-primary btn-lg" style="width:100%;" id="loginBtn">
+                    Sign In
+                </button>
+            </form>
+            <div class="login-footer">
+                <a href="/">← Back to Store</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check if already logged in
+        const token = localStorage.getItem('rawthreads_admin_token');
+        if (token) {
+            fetch('/api/auth/verify', { headers: { Authorization: `Bearer ${token}` } })
+                .then(r => { if (r.ok) window.location.href = '/xrt-admin/dashboard'; })
+                .catch(() => { });
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const btn = document.getElementById('loginBtn');
+            const error = document.getElementById('loginError');
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            btn.textContent = 'Signing in...';
+            btn.disabled = true;
+            error.style.display = 'none';
+
+            try {
+                const res = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await res.json();
+                if (res.ok && data.token) {
+                    localStorage.setItem('rawthreads_admin_token', data.token);
+                    window.location.href = '/xrt-admin/dashboard';
+                } else {
+                    error.textContent = data.error || 'Invalid credentials';
+                    error.style.display = 'block';
+                }
+            } catch (err) {
+                error.textContent = 'Connection failed. Try again.';
+                error.style.display = 'block';
+            }
+
+            btn.textContent = 'Sign In';
+            btn.disabled = false;
+        }
+    </script>
+</body>
+
+</html>

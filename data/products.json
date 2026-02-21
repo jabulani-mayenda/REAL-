@@ -1,0 +1,90 @@
+[
+    {
+        "id": 1,
+        "name": "Classic Logo Hoodie",
+        "price": 15000,
+        "category": "hoodies",
+        "description": "Premium heavyweight hoodie featuring the iconic Raw Threads logo. Made from 100% brushed cotton fleece for ultimate comfort. Ribbed cuffs and hem with a kangaroo pocket.",
+        "image": "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400&h=400&fit=crop",
+        "stock": 15,
+        "featured": true,
+        "createdAt": "2026-02-01T10:00:00Z"
+    },
+    {
+        "id": 2,
+        "name": "Street Culture Tee",
+        "price": 8000,
+        "category": "tshirts",
+        "description": "Oversized streetwear tee with bold graphic print on the back. Drop shoulder fit, 100% combed cotton. Available in multiple colorways.",
+        "image": "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=400&fit=crop",
+        "stock": 25,
+        "featured": true,
+        "createdAt": "2026-02-05T10:00:00Z"
+    },
+    {
+        "id": 3,
+        "name": "Raw Threads Cap",
+        "price": 5000,
+        "category": "caps",
+        "description": "Structured snapback cap with embroidered Raw Threads branding. Adjustable snap closure fits all sizes. Premium cotton twill construction.",
+        "image": "https://images.unsplash.com/photo-1588850561407-ed78c334e67a?w=400&h=400&fit=crop",
+        "stock": 30,
+        "featured": false,
+        "createdAt": "2026-02-10T10:00:00Z"
+    },
+    {
+        "id": 4,
+        "name": "Urban Cargo Joggers",
+        "price": 12000,
+        "category": "joggers",
+        "description": "Relaxed fit cargo joggers with utility pockets. Elastic waistband with drawcord. Tapered leg with elasticated cuffs. Perfect for street and casual wear.",
+        "image": "https://images.unsplash.com/photo-1552902865-b72c031ac5ea?w=400&h=400&fit=crop",
+        "stock": 18,
+        "featured": true,
+        "createdAt": "2026-02-12T10:00:00Z"
+    },
+    {
+        "id": 5,
+        "name": "Graphic Print Tee",
+        "price": 9000,
+        "category": "tshirts",
+        "description": "Statement graphic tee with Raw Threads original artwork. Relaxed fit, soft-touch fabric. Screen printed for vibrant, long-lasting colors.",
+        "image": "https://images.unsplash.com/photo-1503341504253-dff4815485f1?w=400&h=400&fit=crop",
+        "stock": 20,
+        "featured": false,
+        "createdAt": "2026-02-14T10:00:00Z"
+    },
+    {
+        "id": 6,
+        "name": "Premium Zip Hoodie",
+        "price": 18000,
+        "category": "hoodies",
+        "description": "Full-zip hoodie in premium heavyweight fabric. Double-layered hood, metal zip, and split kangaroo pockets. The ultimate layering piece.",
+        "image": "https://images.unsplash.com/photo-1578768079470-571d26b36067?w=400&h=400&fit=crop",
+        "stock": 10,
+        "featured": true,
+        "createdAt": "2026-02-16T10:00:00Z"
+    },
+    {
+        "id": 7,
+        "name": "Essential Crew Neck",
+        "price": 7500,
+        "category": "tshirts",
+        "description": "Everyday essential crew neck tee. Clean minimalist design with subtle Raw Threads embroidery on chest. Super soft ringspun cotton.",
+        "image": "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=400&h=400&fit=crop",
+        "stock": 35,
+        "featured": false,
+        "createdAt": "2026-02-18T10:00:00Z"
+    },
+    {
+        "id": 8,
+        "name": "Varsity Bomber Jacket",
+        "price": 22000,
+        "category": "jackets",
+        "description": "Classic varsity-style bomber jacket with Raw Threads lettering. Wool blend body with faux leather sleeves. Ribbed collar, cuffs, and hem.",
+        "image": "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400&h=400&fit=crop",
+        "stock": 8,
+        "featured": true,
+        "createdAt": "2026-02-19T10:00:00Z"
+    }
+]
