@@ -326,9 +326,13 @@ app.get('/xrt-admin/dashboard', (req, res) => res.sendFile(path.join(__dirname, 
 app.get('/xrt-admin/add-product', (req, res) => res.sendFile(path.join(__dirname, 'public', 'admin', 'add-product.html')));
 app.get('/xrt-admin/edit-product', (req, res) => res.sendFile(path.join(__dirname, 'public', 'admin', 'edit-product.html')));
 
-// ─── Start Server ───────────────────────────────────────────
-app.listen(PORT, () => {
-  console.log(`🧵 Raw Threads server running at http://localhost:${PORT}`);
-  console.log(`   Admin panel: http://localhost:${PORT}/xrt-admin`);
-  console.log(`   Database: ${USE_SUPABASE ? 'Supabase ✅' : 'JSON file (fallback)'}`);
-});
+// ─── Start Server (local) / Export (Vercel) ─────────────────
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`🧵 Raw Threads server running at http://localhost:${PORT}`);
+    console.log(`   Admin panel: http://localhost:${PORT}/xrt-admin`);
+    console.log(`   Database: ${USE_SUPABASE ? 'Supabase ✅' : 'JSON file (fallback)'}`);
+  });
+}
+
+module.exports = app;
