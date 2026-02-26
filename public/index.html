@@ -50,7 +50,8 @@
       <div class="nav-links" id="navLinks">
         <a href="/" class="active">Home</a>
         <a href="/shop">Shop</a>
-        <a href="#categories">Categories</a>
+        <a href="#bulk-orders">Bulk & Corporate</a>
+        <a href="#about">About</a>
         <a href="#contact">Contact</a>
       </div>
       <div class="nav-actions">
@@ -91,76 +92,152 @@
 
   </section>
 
-  <!-- ═══════ NEW ARRIVALS ═══════ -->
-  <section class="section" id="newArrivals">
+  <!-- ═══════ BRAND STORY ═══════ -->
+  <section class="section" id="story" style="background: var(--light-gray);">
+    <div class="container">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;">
+        <div class="reveal-left">
+          <div class="hero-subtitle">The Artisan's Touch</div>
+          <h2 style="font-size: 2.5rem; margin: 15px 0;">Every Bag Tells a Story</h2>
+          <p style="color: var(--text-light); line-height: 1.8; margin-bottom: 25px;">
+            Raw Threads isn't just a brand; it's a movement. We believe that a bag should be more than just an
+            accessory—it should be a testament to the artisan's skill and the wearer's culture.
+            <br><br>
+            From the first cut of premium leather to the final stitch of vibrant Chitenje fabric, our process is
+            entirely by hand. We fuse modern streetwear aesthetics with deep-rooted African heritage to create pieces
+            that are as unique as you are.
+          </p>
+          <a href="#about" class="btn btn-primary">Our Journey →</a>
+        </div>
+        <div class="reveal-right">
+          <div class="premium-card" style="padding: 0; overflow: hidden; height: 500px;">
+            <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=800&h=1000&fit=crop"
+              alt="The Artisan's Touch" style="width:100%; height:100%; object-fit:cover;">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════ FEATURED PRODUCTS ═══════ -->
+  <section class="section" id="featured">
     <div class="container">
       <div class="section-title reveal">
-        <h2>New Arrivals</h2>
-        <p>Fresh drops just landed. Be the first to rock the latest.</p>
+        <h2>Featured Collection</h2>
+        <p>Premium handcrafted bags for the modern trailblazer</p>
         <div class="underline"></div>
       </div>
       <div class="product-grid" id="featuredProducts">
-        <!-- Filled by JS -->
+        <!-- Filled by JS with different types of bags -->
       </div>
-      <div style="text-align:center; margin-top:40px;" class="reveal">
-        <a href="/shop" class="btn btn-outline">View All Products →</a>
+      <div style="text-align:center; margin-top:50px;" class="reveal">
+        <a href="/shop" class="btn btn-outline btn-lg">Browse Shop Collection</a>
       </div>
     </div>
   </section>
 
-  <!-- ═══════ CATEGORIES ═══════ -->
-  <section class="section section-alt" id="categories">
+  <!-- ═══════ WHY CHOOSE US ═══════ -->
+  <section class="section section-alt" id="why-choose-us">
     <div class="container">
       <div class="section-title reveal">
-        <h2>Shop by Category</h2>
-        <p>Find exactly what you're looking for</p>
+        <h2>Why Raw Threads?</h2>
+        <p>Craftmanship and community at our core</p>
         <div class="underline"></div>
       </div>
-      <div class="categories-grid">
-        <a href="/shop?category=hoodies" class="category-card reveal">
-          <img src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400&h=500&fit=crop" alt="Hoodies">
-          <div class="overlay">
-            <h3>Hoodies</h3>
-          </div>
-        </a>
-        <a href="/shop?category=tshirts" class="category-card reveal">
-          <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=500&fit=crop" alt="T-Shirts">
-          <div class="overlay">
-            <h3>T-Shirts</h3>
-          </div>
-        </a>
-        <a href="/shop?category=caps" class="category-card reveal">
-          <img src="https://images.unsplash.com/photo-1588850561407-ed78c334e67a?w=400&h=500&fit=crop" alt="Caps">
-          <div class="overlay">
-            <h3>Caps</h3>
-          </div>
-        </a>
-        <a href="/shop?category=joggers" class="category-card reveal">
-          <img src="https://images.unsplash.com/photo-1552902865-b72c031ac5ea?w=400&h=500&fit=crop" alt="Joggers">
-          <div class="overlay">
-            <h3>Joggers</h3>
-          </div>
-        </a>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+        <div class="premium-card reveal stagger-1">
+          <div style="font-size: 3rem; margin-bottom: 20px;">🛠️</div>
+          <h3>Premium Craft</h3>
+          <p style="color: var(--text-light);">Masterfully hand-stitched using full-grain leather and heavy-duty
+            fabrics, designed to last a lifetime of journeys.</p>
+        </div>
+        <div class="premium-card reveal stagger-2">
+          <div style="font-size: 3rem; margin-bottom: 20px;">🦓</div>
+          <h3>Authentic Soul</h3>
+          <p style="color: var(--text-light);">We infuse modern streetwear silhouettes with 100% authentic African
+            Chitenje fabrics, celebrating heritage in every stitch.</p>
+        </div>
+        <div class="premium-card reveal stagger-3">
+          <div style="font-size: 3rem; margin-bottom: 20px;">🤝</div>
+          <h3>Impact Driven</h3>
+          <p style="color: var(--text-light);">Every purchase directly supports our youth employment initiative,
+            training the next generation of local Malawian artisans.</p>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- ═══════ CTA BANNER ═══════ -->
-  <section class="section" style="background: var(--dark); color: white; text-align: center;">
+  <!-- ═══════ BULK & CORPORATE ═══════ -->
+  <section class="section" id="bulk-orders" style="background: var(--dark); color: white;">
+    <div class="container">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;">
+        <div class="reveal-left">
+          <h2 style="color: white; font-size: 2.5rem;">Bulk & Corporate Orders</h2>
+          <p style="color: rgba(255,255,255,0.7); margin: 20px 0; font-size: 1.1rem;">
+            Whether it's for your team, an event, or retail, we offer specialized wholesale rates and custom branding on
+            our entire bag collection.
+          </p>
+          <ul style="margin-bottom: 30px; list-style: none; padding: 0;">
+            <li style="margin-bottom:12px;">✅ Custom Logo Embossing</li>
+            <li style="margin-bottom:12px;">✅ Volume-Based Discounts</li>
+            <li style="margin-bottom:12px;">✅ Gift Packaging Options</li>
+          </ul>
+          <a href="https://wa.me/265886367677?text=Hi%20Raw%20Threads!%20I'd%20like%20to%20inquire%20about%20bulk%20orders."
+            class="btn btn-accent btn-lg" target="_blank">Inquire via WhatsApp</a>
+        </div>
+        <div class="reveal-right">
+          <div class="glass-card">
+            <img src="https://images.unsplash.com/photo-1547949003-9792a18a2601?w=600&h=400&fit=crop" alt="Bulk Orders"
+              style="width:100%; border-radius: var(--radius-md);">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════ ABOUT THE BRAND ═══════ -->
+  <section class="section" id="about">
+    <div class="container">
+      <div class="section-title reveal">
+        <h2>About the Brand</h2>
+        <p>A journey from a local stitch to a global vision</p>
+        <div class="underline"></div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px;">
+        <div class="premium-card reveal stagger-1">
+          <div class="hero-subtitle" style="color: var(--primary);">01</div>
+          <h3>Your Journey</h3>
+          <p style="color: var(--text-light); line-height: 1.7;">What started as a single needle and a dream in Malawi
+            has grown into a beacon of craftsmanship. Every Raw Threads bag carries the legacy of our shared journey.
+          </p>
+        </div>
+        <div class="premium-card reveal stagger-2">
+          <div class="hero-subtitle" style="color: var(--primary);">02</div>
+          <h3>Vision to Export</h3>
+          <p style="color: var(--text-light); line-height: 1.7;">Our standard of quality is uncompromising. We are
+            preparing our heritage designs to meet the world stage, ensuring African elegance is felt globally.</p>
+        </div>
+        <div class="premium-card reveal stagger-3">
+          <div class="hero-subtitle" style="color: var(--primary);">03</div>
+          <h3>Youth Employment</h3>
+          <p style="color: var(--text-light); line-height: 1.7;">We are more than a workshop; we are a hub for talent.
+            We prioritize training and employing local youth to keep traditional craftsmanship alive.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════ FINAL CTA ═══════ -->
+  <section class="section section-alt" style="text-align: center;">
     <div class="container">
       <div class="reveal">
-        <h2 style="color: white; margin-bottom: 12px;">Ready to Order?</h2>
-        <p style="color: rgba(255,255,255,0.7); max-width: 500px; margin: 0 auto 28px;">
-          Send your order directly via WhatsApp or give us a call. We deliver nationwide!
+        <h2 style="font-size: 2.2rem; margin-bottom: 15px;">Experience the Culture</h2>
+        <p style="color: var(--text-light); max-width: 600px; margin: 0 auto 30px;">
+          Handcrafted luxury is just a message away. Join the Raw Threads family today.
         </p>
-        <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
-          <a href="https://wa.me/265886367677?text=Hi%20Raw%20Threads!%20I'd%20like%20to%20place%20an%20order."
-            class="btn btn-whatsapp btn-lg" target="_blank">
-            💬 Order on WhatsApp
-          </a>
-          <a href="tel:+265886367677" class="btn btn-primary btn-lg">
-            📞 Call Us Now
-          </a>
+        <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+          <a href="/shop" class="btn btn-primary btn-lg">Explore Collection</a>
+          <a href="tel:+265886367677" class="btn btn-outline btn-lg">📞 Contact Us</a>
         </div>
       </div>
     </div>
@@ -177,7 +254,30 @@
         <a href="https://wa.me/265886367677" target="_blank">WhatsApp</a>
         <a href="tel:+265886367677">Call</a>
       </div>
-      <span class="footer-copy">© 2026 Raw Threads</span>
+      <div class="footer-social-sm">
+        <!-- X (Twitter) -->
+        <a href="https://x.com/AldersonHckra" target="_blank" aria-label="Follow us on X">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.258 5.632L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z" />
+          </svg>
+        </a>
+        <!-- Instagram -->
+        <a href="https://www.instagram.com/_raw_threads?igsh=cW5yamh2N2Z5YmRv" target="_blank" aria-label="Follow us on Instagram">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+          </svg>
+        </a>
+        <!-- Facebook -->
+        <a href="https://www.facebook.com/share/1TZFVyB48u/" target="_blank" aria-label="Follow us on Facebook">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+          </svg>
+        </a>
+      </div>
+      <span class="footer-copy">© 2026 Raw Threads · ChampTech Copyright</span>
     </div>
   </footer>
 
@@ -234,12 +334,11 @@
     // ─── Load Dynamic Categories ───────────────────────
     async function loadCategories() {
       const categoryImages = {
-        hoodies: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400&h=500&fit=crop',
-        tshirts: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=500&fit=crop',
-        caps: 'https://images.unsplash.com/photo-1588850561407-ed78c334e67a?w=400&h=500&fit=crop',
-        joggers: 'https://images.unsplash.com/photo-1552902865-b72c031ac5ea?w=400&h=500&fit=crop',
-        shoes: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=500&fit=crop',
-        bags: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400&h=500&fit=crop'
+        'travel-bags': 'https://images.unsplash.com/photo-1547949003-9792a18a2601?w=400&h=500&fit=crop',
+        'everyday-bags': 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400&h=500&fit=crop',
+        'small-goods': 'https://images.unsplash.com/photo-1627123424574-724758594e93?w=400&h=500&fit=crop',
+        'custom-orders': 'https://images.unsplash.com/photo-1601924994987-69e26d50dc26?w=400&h=500&fit=crop',
+        'chitenje-bags': 'https://images.unsplash.com/photo-1594223274512-ad4803739b7c?w=400&h=500&fit=crop'
       };
       const defaultCatImage = 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=400&h=500&fit=crop';
 

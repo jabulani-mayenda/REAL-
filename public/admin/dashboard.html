@@ -47,8 +47,8 @@
                     <div class="stat-value" id="statTotal">—</div>
                 </div>
                 <div class="stat-card" style="border-top: 4px solid #27AE60;">
-                    <div class="stat-label">New This Week</div>
-                    <div class="stat-value" id="statNew">—</div>
+                    <div class="stat-label">Total Items in Stock</div>
+                    <div class="stat-value" id="statTotalStock">—</div>
                 </div>
                 <div class="stat-card" style="border-top: 4px solid #E67E22;">
                     <div class="stat-label">Low Stock</div>
@@ -140,7 +140,7 @@
                 const res = await fetch('/api/admin/stats', { headers: authHeaders() });
                 const stats = await res.json();
                 document.getElementById('statTotal').textContent = stats.totalProducts;
-                document.getElementById('statNew').textContent = stats.newThisWeek;
+                document.getElementById('statTotalStock').textContent = stats.totalStock;
                 document.getElementById('statLowStock').textContent = stats.lowStock;
                 document.getElementById('statValue').textContent = `MK ${formatPrice(stats.totalValue)}`;
             } catch (e) {

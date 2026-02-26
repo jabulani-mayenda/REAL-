@@ -54,9 +54,18 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="productCategory">Category *</label>
-                            <input type="text" id="productCategory" list="categoryList"
-                                placeholder="e.g. hoodies, shoes, bags..." required>
-                            <datalist id="categoryList"></datalist>
+                            <select id="productCategory" required>
+                                <option value="travel-bags">Travel Bags</option>
+                                <option value="everyday-bags">Everyday Bags</option>
+                                <option value="small-goods">Small Goods</option>
+                                <option value="custom-orders">Custom Orders</option>
+                                <option value="chitenje-bags">Chitenje Bags</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="productSubCategory">Sub-Category (e.g. Handbag, Duffle)</label>
+                            <input type="text" id="productSubCategory" placeholder="e.g. Handbag">
                         </div>
 
                         <div class="form-group">
@@ -71,19 +80,18 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="productImage">Product Image</label>
+                        <label for="productImage">Product Images (Upload 3-5 images)</label>
                         <div class="image-upload" id="imageUpload">
-                            <input type="file" id="productImage" accept="image/*" onchange="previewImage(event)"
-                                style="display:none;">
+                            <input type="file" id="productImages" accept="image/*" multiple
+                                onchange="previewImages(event)" style="display:none;">
                             <div class="upload-placeholder" id="uploadPlaceholder"
-                                onclick="document.getElementById('productImage').click()">
+                                onclick="document.getElementById('productImages').click()">
                                 <span style="font-size:2.5rem;">📷</span>
-                                <p>Click to upload image</p>
-                                <small>JPG, PNG, GIF, WebP — max 5MB</small>
+                                <p>Click to upload images (Multiple)</p>
+                                <small>JPG, PNG, GIF, WebP — max 5MB. Select multiple files.</small>
                             </div>
-                            <img id="imagePreview"
-                                style="display:none; max-width:200px; max-height:200px; border-radius:8px; cursor:pointer;"
-                                onclick="document.getElementById('productImage').click()">
+                            <div id="imagePreviews" style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+                            </div>
                         </div>
                     </div>
 
@@ -129,16 +137,36 @@
             window.location.href = '/xrt-admin';
         }
 
-        function previewImage(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function (ev) {
-                    document.getElementById('imagePreview').src = ev.target.result;
-                    document.getElementById('imagePreview').style.display = 'block';
-                    document.getElementById('uploadPlaceholder').style.display = 'none';
-                };
-                reader.readAsDataURL(file);
+        function previewImages(e) {
+            const files = e.target.files;
+            const container = document.getElementById('imagePreviews');
+            container.innerHTML = '';
+
+            if (files.length > 0) {
+                document.getElementById('uploadPlaceholder').style.display = 'none';
+                Array.from(files).forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = function (ev) {
+                        const img = document.createElement('img');
+                        img.src = ev.target.result;
+                        img.style.maxWidth = '100px';
+                        img.style.maxHeight = '100px';
+                        img.style.borderRadius = '8px';
+                        img.style.objectFit = 'cover';
+                        container.appendChild(img);
+                    };
+                    reader.readAsDataURL(file);
+                });
+
+                // Add "Change" button
+                const changeBtn = document.createElement('button');
+                changeBtn.className = 'btn btn-sm btn-outline';
+                changeBtn.style.marginTop = '10px';
+                changeBtn.textContent = 'Change Images';
+                changeBtn.type = 'button';
+                changeBtn.onclick = () => document.getElementById('productImages').click();
+                container.appendChild(document.createElement('br'));
+                container.appendChild(changeBtn);
             }
         }
 
@@ -152,15 +180,17 @@
             formData.append('name', document.getElementById('productName').value);
             formData.append('price', document.getElementById('productPrice').value);
             formData.append('category', document.getElementById('productCategory').value);
+            formData.append('sub_category', document.getElementById('productSubCategory').value);
             formData.append('stock', document.getElementById('productStock').value);
             formData.append('description', document.getElementById('productDescription').value);
             formData.append('featured', document.getElementById('productFeatured').checked);
             formData.append('new_stock', document.getElementById('productNewStock').checked);
 
-
-            const imageFile = document.getElementById('productImage').files[0];
-            if (imageFile) {
-                formData.append('image', imageFile);
+            const imageFiles = document.getElementById('productImages').files;
+            if (imageFiles.length > 0) {
+                Array.from(imageFiles).forEach(file => {
+                    formData.append('images', file);
+                });
             }
 
             try {

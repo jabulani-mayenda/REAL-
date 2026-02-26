@@ -54,8 +54,18 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="productCategory">Category *</label>
-                            <input type="text" id="productCategory" list="categoryList" required>
-                            <datalist id="categoryList"></datalist>
+                            <select id="productCategory" required>
+                                <option value="travel-bags">Travel Bags</option>
+                                <option value="everyday-bags">Everyday Bags</option>
+                                <option value="small-goods">Small Goods</option>
+                                <option value="custom-orders">Custom Orders</option>
+                                <option value="chitenje-bags">Chitenje Bags</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="productSubCategory">Sub-Category (e.g. Handbag, Duffle)</label>
+                            <input type="text" id="productSubCategory" placeholder="e.g. Handbag">
                         </div>
 
                         <div class="form-group">
@@ -70,20 +80,20 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Current Image</label>
-                        <img id="currentImage"
-                            style="max-width:200px; max-height:200px; border-radius:8px; margin-bottom:12px;">
-                        <label for="productImage">Replace Image (optional)</label>
+                        <label>Current Images</label>
+                        <div id="currentImages" style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px;">
+                        </div>
+
+                        <label for="productImages">Replace Images (Upload 3-5 images)</label>
                         <div class="image-upload">
-                            <input type="file" id="productImage" accept="image/*" onchange="previewImage(event)"
-                                style="display:none;">
-                            <div class="upload-placeholder" onclick="document.getElementById('productImage').click()">
+                            <input type="file" id="productImages" accept="image/*" multiple
+                                onchange="previewImages(event)" style="display:none;">
+                            <div class="upload-placeholder" onclick="document.getElementById('productImages').click()">
                                 <span style="font-size:2rem;">📷</span>
-                                <p>Click to upload new image</p>
+                                <p>Click to upload new images (replaces all current)</p>
                             </div>
-                            <img id="imagePreview"
-                                style="display:none; max-width:200px; border-radius:8px; cursor:pointer;"
-                                onclick="document.getElementById('productImage').click()">
+                            <div id="imagePreviews" style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+                            </div>
                         </div>
                     </div>
 
@@ -126,15 +136,25 @@
             window.location.href = '/xrt-admin';
         }
 
-        function previewImage(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = ev => {
-                    document.getElementById('imagePreview').src = ev.target.result;
-                    document.getElementById('imagePreview').style.display = 'block';
-                };
-                reader.readAsDataURL(file);
+        function previewImages(e) {
+            const files = e.target.files;
+            const container = document.getElementById('imagePreviews');
+            container.innerHTML = '';
+
+            if (files.length > 0) {
+                Array.from(files).forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = ev => {
+                        const img = document.createElement('img');
+                        img.src = ev.target.result;
+                        img.style.maxWidth = '100px';
+                        img.style.maxHeight = '100px';
+                        img.style.borderRadius = '8px';
+                        img.style.objectFit = 'cover';
+                        container.appendChild(img);
+                    };
+                    reader.readAsDataURL(file);
+                });
             }
         }
 
@@ -145,12 +165,17 @@
                 document.getElementById('productName').value = p.name;
                 document.getElementById('productPrice').value = p.price;
                 document.getElementById('productCategory').value = p.category;
+                document.getElementById('productSubCategory').value = p.sub_category || '';
                 document.getElementById('productStock').value = p.stock;
                 document.getElementById('productDescription').value = p.description;
                 document.getElementById('productFeatured').checked = p.featured;
                 document.getElementById('productNewStock').checked = p.new_stock;
 
-                document.getElementById('currentImage').src = p.image;
+                const currentContainer = document.getElementById('currentImages');
+                const images = p.images || (p.image ? [p.image] : []);
+                currentContainer.innerHTML = images.map(img => `
+                    <img src="${img}" style="width:80px; height:80px; border-radius:6px; object-fit:cover;">
+                `).join('');
             } catch (e) {
                 showToast('Failed to load product', 'error');
             }
@@ -166,14 +191,19 @@
             formData.append('name', document.getElementById('productName').value);
             formData.append('price', document.getElementById('productPrice').value);
             formData.append('category', document.getElementById('productCategory').value);
+            formData.append('sub_category', document.getElementById('productSubCategory').value);
             formData.append('stock', document.getElementById('productStock').value);
             formData.append('description', document.getElementById('productDescription').value);
             formData.append('featured', document.getElementById('productFeatured').checked);
             formData.append('new_stock', document.getElementById('productNewStock').checked);
 
 
-            const imageFile = document.getElementById('productImage').files[0];
-            if (imageFile) formData.append('image', imageFile);
+            const imageFiles = document.getElementById('productImages').files;
+            if (imageFiles.length > 0) {
+                Array.from(imageFiles).forEach(file => {
+                    formData.append('images', file);
+                });
+            }
 
             try {
                 const res = await fetch(`/api/products/${productId}`, {

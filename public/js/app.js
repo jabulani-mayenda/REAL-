@@ -50,20 +50,40 @@ function formatPrice(amount) {
 
 // ─── PRODUCT CARD (Clean — matches reference) ──────────────
 function createProductCard(product) {
+    const mainImg = (product.images && product.images.length > 0) ? product.images[0] : (product.image || '');
     return `
-    <div class="product-card reveal" onclick="goToProduct(event, ${product.id})">
+    <div class="product-card reveal" onclick="handleProductTap(event, this, ${product.id})">
       <div class="product-image">
-        <img src="${product.image}" alt="${product.name}" loading="lazy">
+        <img src="${mainImg}" alt="${product.name}" loading="lazy">
       </div>
       <div class="product-info">
         <div class="product-name">${product.name}</div>
         <div class="product-price"><span class="currency">MK </span>${formatPrice(product.price)}</div>
-        <button class="add-to-cart-btn" onclick="quickAdd(event, ${product.id}, '${product.name.replace(/'/g, "\\'")}', ${product.price}, '${product.image}')">
+        <button class="add-to-cart-btn" onclick="quickAdd(event, ${product.id}, '${product.name.replace(/'/g, "\\'")}', ${product.price}, '${mainImg}')">
           Add to Cart
         </button>
       </div>
     </div>
   `;
+}
+
+function handleProductTap(e, el, id) {
+    // If they clicked the add to cart button, don't do zoom/nav
+    if (e.target.closest('.add-to-cart-btn')) return;
+
+    // Toggle zoom on first tap/click
+    if (!el.classList.contains('zoomed')) {
+        // Remove zoom from others
+        document.querySelectorAll('.product-card.zoomed').forEach(c => c.classList.remove('zoomed'));
+        el.classList.add('zoomed');
+
+        // On mobile, we wait for a second tap or a delay before navigating
+        // For now, let's keep it interactive: one tap zooms, second tap navigates
+        return;
+    }
+
+    // Second tap or double-click navigates
+    window.location.href = `/product?id=${id}`;
 }
 
 function goToProduct(e, id) {
@@ -123,10 +143,12 @@ function refreshReveal() {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
+                // If it has stagger classes, children might need them too? 
+                // No, we already added them in HTML.
                 observer.unobserve(entry.target);
             }
         });
-    }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+    }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
 
     document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => {
         if (!el.classList.contains('visible')) observer.observe(el);

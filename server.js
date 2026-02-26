@@ -168,18 +168,21 @@ app.get('/api/products/:id', async (req, res) => {
 });
 
 // POST create product (admin)
-app.post('/api/products', requireAdmin, upload.single('image'), async (req, res) => {
+app.post('/api/products', requireAdmin, upload.array('images', 5), async (req, res) => {
   try {
     const product = {
       name: req.body.name,
       price: parseFloat(req.body.price),
       category: req.body.category || 'general',
+      sub_category: req.body.sub_category || '',
       description: req.body.description || '',
-      image: req.file ? '/uploads/' + req.file.filename : (req.body.image || ''),
+      images: req.files ? req.files.map(f => '/uploads/' + f.filename) : (req.body.images ? JSON.parse(req.body.images) : []),
       stock: parseInt(req.body.stock) || 0,
       featured: req.body.featured === 'true',
       new_stock: req.body.new_stock === 'true'
     };
+    // Keep single image field for compatibility with older parts of the app if needed
+    if (product.images.length > 0) product.image = product.images[0];
     console.log('Product to save:', JSON.stringify(product, null, 2));
 
 
@@ -203,20 +206,23 @@ app.post('/api/products', requireAdmin, upload.single('image'), async (req, res)
 });
 
 // PUT update product (admin)
-app.put('/api/products/:id', requireAdmin, upload.single('image'), async (req, res) => {
+app.put('/api/products/:id', requireAdmin, upload.array('images', 5), async (req, res) => {
   try {
     const updates = {};
     if (req.body.name) updates.name = req.body.name;
     if (req.body.price) updates.price = parseFloat(req.body.price);
     if (req.body.category) updates.category = req.body.category;
     if (req.body.description) updates.description = req.body.description;
+    if (req.body.sub_category) updates.sub_category = req.body.sub_category;
     if (req.body.stock !== undefined) updates.stock = parseInt(req.body.stock);
     if (req.body.featured !== undefined) updates.featured = req.body.featured === 'true';
     if (req.body.new_stock !== undefined) updates.new_stock = req.body.new_stock === 'true';
     console.log(`Updating product ${req.params.id}:`, JSON.stringify(updates, null, 2));
 
-
-    if (req.file) updates.image = '/uploads/' + req.file.filename;
+    if (req.files && req.files.length > 0) {
+      updates.images = req.files.map(f => '/uploads/' + f.filename);
+      updates.image = updates.images[0];
+    }
 
     if (USE_SUPABASE) {
       const { data, error } = await supabase
@@ -298,12 +304,13 @@ app.get('/api/admin/stats', requireAdmin, async (req, res) => {
     }
 
     const totalProducts = products.length;
+    const totalStock = products.reduce((sum, p) => sum + (parseInt(p.stock) || 0), 0);
     const lowStock = products.filter(p => p.stock <= 3).length;
     const totalValue = products.reduce((sum, p) => sum + (p.price * p.stock), 0);
     const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
     const newThisWeek = products.filter(p => new Date(p.created_at || p.createdAt) >= weekAgo).length;
 
-    res.json({ totalProducts, newThisWeek, lowStock, totalValue });
+    res.json({ totalProducts, totalStock, newThisWeek, lowStock, totalValue });
   } catch (err) {
     console.error('Stats error:', err.message);
     res.status(500).json({ error: 'Failed to load stats' });
