@@ -1690,6 +1690,16 @@ h3 {
 }
 
 /* ═══════════════════════════════════════════════════════════════
+   TWO COLUMN LAYOUT — Brand Story / Bulk Orders
+   ═══════════════════════════════════════════════════════════════ */
+.two-col-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+/* ═══════════════════════════════════════════════════════════════
    RESPONSIVE
    ═══════════════════════════════════════════════════════════════ */
 @media (max-width: 992px) {
@@ -1852,6 +1862,37 @@ h3 {
   .loader-text {
     font-size: 1.8rem;
   }
+
+  /* ─── Two-column sections stack vertically on mobile ─── */
+  .two-col-grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  /* Image appears above text on mobile */
+  .two-col-grid .reveal-right {
+    order: -1;
+  }
+
+  /* Full-width images at a nice height */
+  .two-col-grid .premium-card,
+  .two-col-grid .glass-card {
+    height: auto !important;
+  }
+
+  .two-col-grid .premium-card img,
+  .two-col-grid .glass-card img {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+  }
+
+  /* Shrink large section headings */
+  #story h2,
+  #bulk-orders h2 {
+    font-size: 1.9rem !important;
+  }
 }
 
 @media (max-width: 480px) {
@@ -1866,5 +1907,15 @@ h3 {
 
   .product-grid {
     gap: 10px;
+  }
+
+  .two-col-grid .premium-card img,
+  .two-col-grid .glass-card img {
+    height: 230px;
+  }
+
+  #story h2,
+  #bulk-orders h2 {
+    font-size: 1.6rem !important;
   }
 }
